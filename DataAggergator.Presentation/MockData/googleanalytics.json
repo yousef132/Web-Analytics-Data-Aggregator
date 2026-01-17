@@ -1,0 +1,254 @@
+ [
+    {
+      "date": "2025-10-20",
+      "page": "/home",
+      "users": 120,
+      "sessions": 150,
+      "views": 310
+    },
+    {
+      "date": "2025-10-20",
+      "page": "/search",
+      "users": 85,
+      "sessions": 110,
+      "views": 260
+    },
+    {
+      "date": "2025-10-20",
+      "page": "/product/flight",
+      "users": 70,
+      "sessions": 95,
+      "views": 210
+    },
+    {
+      "date": "2025-10-20",
+      "page": "/checkout",
+      "users": 40,
+      "sessions": 55,
+      "views": 120
+    },
+    {
+      "date": "2025-10-20",
+      "page": "/confirmation",
+      "users": 25,
+      "sessions": 30,
+      "views": 60
+    },
+
+    {
+      "date": "2025-10-21",
+      "page": "/home",
+      "users": 135,
+      "sessions": 170,
+      "views": 340
+    },
+    {
+      "date": "2025-10-21",
+      "page": "/search",
+      "users": 90,
+      "sessions": 125,
+      "views": 280
+    },
+    {
+      "date": "2025-10-21",
+      "page": "/product/flight",
+      "users": 82,
+      "sessions": 110,
+      "views": 245
+    },
+    {
+      "date": "2025-10-21",
+      "page": "/checkout",
+      "users": 48,
+      "sessions": 65,
+      "views": 150
+    },
+    {
+      "date": "2025-10-21",
+      "page": "/confirmation",
+      "users": 30,
+      "sessions": 38,
+      "views": 75
+    },
+
+    {
+      "date": "2025-10-22",
+      "page": "/home",
+      "users": 160,
+      "sessions": 210,
+      "views": 420
+    },
+    {
+      "date": "2025-10-22",
+      "page": "/search",
+      "users": 110,
+      "sessions": 160,
+      "views": 360
+    },
+    {
+      "date": "2025-10-22",
+      "page": "/product/flight",
+      "users": 95,
+      "sessions": 140,
+      "views": 310
+    },
+    {
+      "date": "2025-10-22",
+      "page": "/checkout",
+      "users": 65,
+      "sessions": 90,
+      "views": 190
+    },
+    {
+      "date": "2025-10-22",
+      "page": "/confirmation",
+      "users": 42,
+      "sessions": 55,
+      "views": 105
+    },
+
+    {
+      "date": "2025-10-23",
+      "page": "/home",
+      "users": 175,
+      "sessions": 230,
+      "views": 480
+    },
+    {
+      "date": "2025-10-23",
+      "page": "/search",
+      "users": 125,
+      "sessions": 180,
+      "views": 400
+    },
+    {
+      "date": "2025-10-23",
+      "page": "/product/flight",
+      "users": 110,
+      "sessions": 165,
+      "views": 350
+    },
+    {
+      "date": "2025-10-23",
+      "page": "/checkout",
+      "users": 78,
+      "sessions": 110,
+      "views": 235
+    },
+    {
+      "date": "2025-10-23",
+      "page": "/confirmation",
+      "users": 55,
+      "sessions": 72,
+      "views": 135
+    },
+
+    {
+      "date": "2025-10-24",
+      "page": "/home",
+      "users": 220,
+      "sessions": 300,
+      "views": 650
+    },
+    {
+      "date": "2025-10-24",
+      "page": "/search",
+      "users": 180,
+      "sessions": 260,
+      "views": 580
+    },
+    {
+      "date": "2025-10-24",
+      "page": "/product/flight",
+      "users": 155,
+      "sessions": 240,
+      "views": 520
+    },
+    {
+      "date": "2025-10-24",
+      "page": "/checkout",
+      "users": 110,
+      "sessions": 165,
+      "views": 360
+    },
+    {
+      "date": "2025-10-24",
+      "page": "/confirmation",
+      "users": 82,
+      "sessions": 105,
+      "views": 200
+    },
+
+    {
+      "date": "2025-10-25",
+      "page": "/home",
+      "users": 140,
+      "sessions": 190,
+      "views": 400
+    },
+    {
+      "date": "2025-10-25",
+      "page": "/search",
+      "users": 110,
+      "sessions": 150,
+      "views": 330
+    },
+    {
+      "date": "2025-10-25",
+      "page": "/product/flight",
+      "users": 95,
+      "sessions": 130,
+      "views": 280
+    },
+    {
+      "date": "2025-10-25",
+      "page": "/checkout",
+      "users": 60,
+      "sessions": 85,
+      "views": 180
+    },
+    {
+      "date": "2025-10-25",
+      "page": "/confirmation",
+      "users": 45,
+      "sessions": 60,
+      "views": 110
+    },
+
+    {
+      "date": "2025-10-26",
+      "page": "/home",
+      "users": 125,
+      "sessions": 170,
+      "views": 360
+    },
+    {
+      "date": "2025-10-26",
+      "page": "/search",
+      "users": 95,
+      "sessions": 130,
+      "views": 290
+    },
+    {
+      "date": "2025-10-26",
+      "page": "/product/flight",
+      "users": 80,
+      "sessions": 115,
+      "views": 240
+    },
+    {
+      "date": "2025-10-26",
+      "page": "/checkout",
+      "users": 55,
+      "sessions": 78,
+      "views": 160
+    },
+    {
+      "date": "2025-10-26",
+      "page": "/confirmation",
+      "users": 38,
+      "sessions": 52,
+      "views": 95
+    }
+  ]
+

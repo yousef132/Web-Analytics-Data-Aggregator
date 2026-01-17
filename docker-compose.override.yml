@@ -1,0 +1,96 @@
+version: "3.9"
+
+services:
+  dataaggergator.presentation:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Postgres=Host=postgres;Port=5432;Database=dataaggregator;Username=postgres;Password=postgres
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+      - Seq__Url=http://seq:80
+        # Override appsettings.json Keycloak config for Docker networking
+      - Keycloak__Authority=http://keycloak:8080/realms/dataaggregator
+      - Keycloak__MetadataAddress=http://keycloak:8080/realms/dataaggregator/.well-known/openid-configuration
+      - Keycloak__Audience=dataaggregator-api
+      - Keycloak__RequireHttpsMetadata=false
+      - Keycloak__ValidateAudience=true
+      - Keycloak__ValidateIssuer=true
+      - Keycloak__BaseUrl=http://keycloak:8080
+      # For client credentials flow
+      - Keycloak__ClientId=data_aggregator_api
+      - Keycloak__ClientSecret=DG7LduofcgoiGTo7L39S3fxfnHagbDSW
+      - Keycloak__Realm=dataaggregator
+    depends_on:
+      seq:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  postgres:
+    environment:
+      POSTGRES_DB: dataaggregator
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
+  postgres-keycloak:
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+
+  keycloak:
+    command: start-dev
+    environment:
+
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres-keycloak:5432/keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HTTP_ENABLED: "true"
+      KC_HEALTH_ENABLED: "true"
+    depends_on:
+      postgres-keycloak:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  rabbitmq:
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  seq:
+    environment:
+      ACCEPT_EULA: "Y"
+      SEQ_ADMIN_USERNAME: admin
+      SEQ_FIRSTRUN_ADMINPASSWORD: admin123
+    ports:
+      - "5341:80"

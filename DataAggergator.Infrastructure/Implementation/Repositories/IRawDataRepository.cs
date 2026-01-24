@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DataAggergator.Application.Abstractions.Reposioties;
 using DataAggergator.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace DataAggergator.Infrastructure.Implementation.Repositories
 {
@@ -24,4 +25,5 @@ namespace DataAggergator.Infrastructure.Implementation.Repositories
                                              }).ToListAsync(cancellationToken);
         }
     }
+
 }

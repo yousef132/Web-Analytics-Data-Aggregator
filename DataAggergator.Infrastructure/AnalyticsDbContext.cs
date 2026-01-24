@@ -15,6 +15,9 @@ namespace DataAggergator.Infrastructure
         public DbSet<RawData> RawData => Set<RawData>();
         public DbSet<DailyStats> DailyStats => Set<DailyStats>();
         public DbSet<NewsLetterOnBoardingSagaData> SagaData { get; set; }
+        public DbSet<OutboxMessage> OutboxMessages { get; set; }
+        public DbSet<Order> Orders { get; set; }
+
 
         public AnalyticsDbContext()
         {

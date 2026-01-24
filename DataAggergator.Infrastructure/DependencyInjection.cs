@@ -34,6 +34,9 @@ namespace DataAggergator.Infrastructure
             services.AddScoped<IKeycloakService, KeycloakService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IOutboxRepository, OutboxRepository>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddHostedService<OutboxPublisherWorker>();
 
             // Configure MassTransit with RabbitMQ
             services.AddMassTransit(cfg =>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAggergator.Domain.Models;
+using DataAggergator.Infrastructure.Sagas;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAggergator.Infrastructure
@@ -13,6 +14,8 @@ namespace DataAggergator.Infrastructure
         public DbSet<User> Users => Set<User>();
         public DbSet<RawData> RawData => Set<RawData>();
         public DbSet<DailyStats> DailyStats => Set<DailyStats>();
+        public DbSet<NewsLetterOnBoardingSagaData> SagaData { get; set; }
+
         public AnalyticsDbContext()
         {
             
@@ -22,8 +25,13 @@ namespace DataAggergator.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<NewsLetterOnBoardingSagaData>().HasKey(s => s.CorrelationId); //pk
+
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AnalyticsDbContext).Assembly);
         }
+
+        public DbSet<Subscriber> Subscribers { get; set; }
+
     }
 }

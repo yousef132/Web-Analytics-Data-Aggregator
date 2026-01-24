@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAggergator.Application.Dtos;
 
-namespace DataAggergator.Domain.Messages
+namespace DataAggergator.Infrastructure.Messages
 {
     public record AnalyticsRecordsAggregated
     {

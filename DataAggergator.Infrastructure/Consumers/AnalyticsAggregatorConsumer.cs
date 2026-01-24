@@ -1,5 +1,5 @@
 ﻿using DataAggergator.Application.Dtos;
-using DataAggergator.Domain.Messages;
+using DataAggergator.Infrastructure.Messages;
 using DataAggergator.Domain.Models;
 using MassTransit;
 using Serilog;

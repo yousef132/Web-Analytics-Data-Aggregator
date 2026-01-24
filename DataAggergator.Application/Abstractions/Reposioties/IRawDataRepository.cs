@@ -12,4 +12,5 @@ namespace DataAggergator.Application.Abstractions.Reposioties
         Task<List<RawData>?> GetPageOverView(CancellationToken cancellationToken);
 
     }
+
 }

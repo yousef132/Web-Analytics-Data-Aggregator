@@ -1,5 +1,5 @@
 ﻿using DataAggergator.Application.Abstractions.Services;
-using DataAggergator.Domain.Messages;
+using DataAggergator.Infrastructure.Messages;
 using DataAggergator.Presentation.Middlewares;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;

@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataAggergator.Application\DataAggergator.Application.csproj" />
     <ProjectReference Include="..\DataAggergator.Infrastructure\DataAggergator.Infrastructure.csproj" />
   </ItemGroup>
 

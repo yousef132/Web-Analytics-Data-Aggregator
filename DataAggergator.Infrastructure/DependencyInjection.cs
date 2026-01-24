@@ -2,8 +2,10 @@
 using DataAggergator.Application.Abstractions.Services;
 using DataAggergator.Infrastructure.Consumers;
 using DataAggergator.Infrastructure.Folder;
+using DataAggergator.Infrastructure.Handlers;
 using DataAggergator.Infrastructure.Implementation.Repositories;
 using DataAggergator.Infrastructure.Implementation.Services;
+using DataAggergator.Infrastructure.Sagas;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -28,15 +30,32 @@ namespace DataAggergator.Infrastructure
             services.AddScoped<IRawDataRepository, RawDataRepository>();
             services.AddScoped<IDailyStatsRepository, DailyStatsRepository>();
             services.AddScoped<IOverViewService, OverViewService>();
+            services.AddHttpClient<IKeycloakService, KeycloakService>();
             services.AddScoped<IKeycloakService, KeycloakService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddHttpClient<IKeycloakService, KeycloakService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             // Configure MassTransit with RabbitMQ
             services.AddMassTransit(cfg =>
             {
-                cfg.AddConsumer<AnalyticsAggregatorConsumer>();
+                //cfg.AddConsumer<AnalyticsAggregatorConsumer>();
                 cfg.SetKebabCaseEndpointNameFormatter();
+
+                // saga configurations
+                cfg.AddSagaStateMachine<NewsletterOnboardingSaga, NewsLetterOnBoardingSagaData>()
+                      .EntityFrameworkRepository(r =>
+                      {
+                          r.ExistingDbContext<AnalyticsDbContext>();
+
+                          r.UsePostgres();
+                      });
+
+                cfg.AddConsumers(typeof(SubscribeToNewsletterHandler).Assembly);
+                //cfg.AddConsumers(typeof(SendWelcomeEmailHandler).Assembly);
+                //cfg.AddConsumers(typeof(SendFollowUpEmailHandler).Assembly);
+                //cfg.AddConsumers(typeof(OnboardingCompletedHandler).Assembly);
+                //cfg.AddConsumers(typeof(NewsletterOnboardingSaga).Assembly);
+
 
                 cfg.UsingRabbitMq((context, rabbitCfg) =>
                 {
@@ -45,22 +64,26 @@ namespace DataAggergator.Infrastructure
                         h.Username(configuration["RabbitMQ:Username"]!);
                         h.Password(configuration["RabbitMQ:Password"]!);
                     });
+   
+                    rabbitCfg.ConfigureEndpoints(context);
+                    rabbitCfg.UseInMemoryOutbox(context);
 
-                    rabbitCfg.ReceiveEndpoint("analytics.raw.q", e =>
-                    {
-                        e.ConfigureConsumer<AnalyticsAggregatorConsumer>(context);
+                    //rabbitCfg.ReceiveEndpoint("analytics.raw.q", e =>
+                    //{
+                    //    e.ConfigureConsumer<AnalyticsAggregatorConsumer>(context);
 
-                        // Retry policy: 3 attempts, 2=>4=>8
-                        e.UseMessageRetry(r => r.Exponential(
-                             retryLimit: 3,                         
-                             minInterval: TimeSpan.FromSeconds(2),  
-                             maxInterval: TimeSpan.FromSeconds(10), 
-                             intervalDelta: TimeSpan.FromSeconds(2) 
-                         ));
+                    //    // Retry policy: 3 attempts, 2=>4=>8
+                    //    e.UseMessageRetry(r => r.Exponential(
+                    //         retryLimit: 3,                         
+                    //         minInterval: TimeSpan.FromSeconds(2),  
+                    //         maxInterval: TimeSpan.FromSeconds(10), 
+                    //         intervalDelta: TimeSpan.FromSeconds(2) 
+                    //     ));
 
-                        // Dead-letter queue
-                        e.BindDeadLetterQueue("analytics.dlq");
-                    });
+                    //    // Dead-letter queue
+                    //    e.BindDeadLetterQueue("analytics.dlq");
+                    //});
+
                 });
             });
 

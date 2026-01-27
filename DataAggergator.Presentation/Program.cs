@@ -52,11 +52,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    //app.UseHttpsRedirection();
 }
 app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseMiddleware<ExceptionLoggingMiddleware>();
 
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

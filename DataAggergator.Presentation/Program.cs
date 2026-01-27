@@ -1,5 +1,6 @@
 using DataAggergator.Infrastructure;
 using DataAggergator.Infrastructure.Folder;
+using DataAggergator.Presentation.Extentions;
 using DataAggergator.Presentation.Middlewares;
 using Serilog;
 using Serilog.Formatting.Json;
@@ -44,6 +45,7 @@ builder.Host.UseSerilog();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+await app.ApplyMigrations();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

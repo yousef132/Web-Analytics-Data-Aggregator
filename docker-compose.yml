@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  dataaggergator.presentation:
+  backend:
     image: dataaggergatorpresentation:dev
     build:
       context: .
@@ -54,6 +54,15 @@ services:
     depends_on:
       postgres-keycloak:
         condition: service_healthy
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "1324:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro # Host : Container  
+    depends_on:
+      - backend
 
 volumes:
   pgdata:

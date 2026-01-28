@@ -1,0 +1,116 @@
+version: "3.9"
+
+services:
+  backend:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Postgres=Host=eqraatech-db-range;Port=5432;Database=eqraatech;Username=postgres;Password=postgres
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+      - Seq__Url=http://seq:80
+        # Override appsettings.json Keycloak config for Docker networking
+      - Keycloak__Authority=http://keycloak:8080/realms/dataaggregator
+      - Keycloak__MetadataAddress=http://keycloak:8080/realms/dataaggregator/.well-known/openid-configuration
+      - Keycloak__Audience=dataaggregator-api
+      - Keycloak__RequireHttpsMetadata=false
+      - Keycloak__ValidateAudience=true
+      - Keycloak__ValidateIssuer=true
+      - Keycloak__BaseUrl=http://keycloak:8080
+      # For client credentials flow
+      - Keycloak__ClientId=data_aggregator_api
+      - Keycloak__ClientSecret=DG7LduofcgoiGTo7L39S3fxfnHagbDSW
+      - Keycloak__Realm=dataaggregator
+    depends_on:
+      seq:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+    expose:
+      - "8080"  # Exposed only inside Docker network, not mapped to host to avoid port conflicts between replicas
+      - "8081"  # All replicas share the same internal ports inside the Docker network
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  postgres:
+    container_name: eqraatech-db-range
+    environment:
+      POSTGRES_DB: eqraatech
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init-range-partitioning.sql:/docker-entrypoint-initdb.d/init-range-partitioning.sql
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  postgres-keycloak:
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432" #host : container
+
+
+  nginx:
+    image: nginx:latest
+    ports:
+     - "1324:80"  # HOST : CONTAINER, to prevent used port conflicts
+    volumes:
+      # Mount our custom nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend  # Wait until backend service is up
+  keycloak:
+    command: start-dev
+    environment:
+
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres-keycloak:5432/keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HTTP_ENABLED: "true"
+      KC_HEALTH_ENABLED: "true"
+    depends_on:
+      postgres-keycloak:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  rabbitmq:
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  seq:
+    environment:
+      ACCEPT_EULA: "Y"
+      SEQ_ADMIN_USERNAME: admin
+      SEQ_FIRSTRUN_ADMINPASSWORD: admin123
+    ports:
+      - "5341:80"

@@ -14,6 +14,9 @@
 # Editor-based HTTP Client requests
 /httpRequests/
 
+# Visual Studio Docker
+*.dcproj
+
 # JetBrains Rider / IntelliJ
 .idea/
 *.sln.iml

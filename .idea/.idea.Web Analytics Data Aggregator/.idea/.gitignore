@@ -13,3 +13,7 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+
+# JetBrains Rider / IntelliJ
+.idea/
+*.sln.iml
